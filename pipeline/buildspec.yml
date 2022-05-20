@@ -2,7 +2,11 @@ version: 0.2
 env:
   variables:
     Enviroment: "dev"
-    Image: "1.0.0"
+    IMAGE_TAG: "1.0.0"
+    AWS_DEFAULT_REGION: "us-east-1"
+    AWS_ACCOUNT_ID: "336607023349"
+    IMAGE_REPO_NAME: "flask"
+    IMAGE_REPO_NAME: "flask_code_build"
 phases:
   pre_build:
     commands:
