@@ -1,21 +1,12 @@
 Parameters:
-  GithubAuthToken:
-    Type: String
-    Description: "Token used by codepipeline to verify if the incoming event comes from the github repo"
-    MaxLength: 100
-    MinLength: 0
-    NoEcho: true
-    # AllowedPattern: "[a-z0-9]*"
   GithubBranch:
     Type: String
     Description: "Pipeline branch"
-  GithubAccount:
-    Type: String
-    Description: "Github accound name"
+    Default: "develop"
   GithubRepository:
     Type: String
     Description: "Github repository name"
-
+    Default: "code-build"
 Mappings:
   CodeBuildComputeTypeMap:
     develop:
@@ -24,20 +15,6 @@ Mappings:
       type: "BUILD_GENERAL1_SMALL"
 
 Resources:
-  Webhook:
-    Type: "AWS::CodePipeline::Webhook"
-    Properties:
-      Authentication: "GITHUB_HMAC"
-      AuthenticationConfiguration:
-        SecretToken: !Ref GithubAuthToken
-      RegisterWithThirdParty: true
-      TargetPipeline: !Ref Pipeline
-      TargetAction: Source
-      TargetPipelineVersion: !GetAtt Pipeline.Version
-      Filters:
-        - JsonPath: "$.ref"
-          MatchEquals: refs/heads/{Branch}
-
   Pipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
@@ -47,22 +24,6 @@ Resources:
         Type: S3
         Location: !Ref ArtifactBucket
       Stages:
-        - Name: Source
-          Actions:
-            - Name: Source
-              ActionTypeId:
-                Category: Source
-                Owner: ThirdParty
-                Provider: GitHub
-                Version: "1"
-              OutputArtifacts:
-                - Name: SourceCode
-              Configuration:
-                Owner: !Ref GithubAccount
-                Repo: !Ref GithubRepository
-                PollForSourceChanges: false
-                Branch: !Ref GithubBranch
-                OAuthToken: !Ref GithubAuthToken
         - Name: Build
           Actions:
             - Name: Build

@@ -1,5 +1,8 @@
 version: 0.2
-
+env:
+  variables:
+    Enviroment: "dev"
+    Image: "1.0.0"
 phases:
   pre_build:
     commands:
