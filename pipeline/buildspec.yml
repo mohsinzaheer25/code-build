@@ -6,7 +6,6 @@ env:
     AWS_DEFAULT_REGION: "us-east-1"
     AWS_ACCOUNT_ID: "336607023349"
     IMAGE_REPO_NAME: "flask"
-    IMAGE_REPO_NAME: "flask_code_build"
 phases:
   pre_build:
     commands:
