@@ -7,6 +7,7 @@ Parameters:
     Type: String
     Description: "Github repository name"
     Default: "code-build"
+
 Mappings:
   CodeBuildComputeTypeMap:
     develop:
@@ -24,6 +25,22 @@ Resources:
         Type: S3
         Location: !Ref ArtifactBucket
       Stages:
+        - Name: Source
+          Actions:
+            - Name: Source
+              ActionTypeId:
+                Category: Source
+                Owner: ThirdParty
+                Provider: GitHub
+                Version: "1"
+              OutputArtifacts:
+                - Name: SourceCode
+              Configuration:
+                Owner: !Ref GithubAccount
+                Repo: !Ref GithubRepository
+                PollForSourceChanges: false
+                Branch: !Ref GithubBranch
+                OAuthToken: !Ref GithubAuthToken
         - Name: Build
           Actions:
             - Name: Build
